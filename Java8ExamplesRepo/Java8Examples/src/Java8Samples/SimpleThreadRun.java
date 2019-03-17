@@ -10,7 +10,7 @@ class Runner{
 	}
 }
 
-public class MyTest {
+public class SimpleThreadRun {
 
 	public static void main(String[] args) {
 		Runner runner = new Runner();

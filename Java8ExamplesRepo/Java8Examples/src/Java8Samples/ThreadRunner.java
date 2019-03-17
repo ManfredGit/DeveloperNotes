@@ -1,5 +1,5 @@
 package Java8Samples;
-class s1 implements Runnable 
+class ThreadRunner implements Runnable 
 { 
     int x = 0, y = 0; 
     int addX() {x++; return x;} 
@@ -10,8 +10,8 @@ class s1 implements Runnable
 } 
     public static void main(String args[]) 
     { 
-        s1 run1 = new s1(); 
-        s1 run2 = new s1(); 
+        ThreadRunner run1 = new ThreadRunner(); 
+        ThreadRunner run2 = new ThreadRunner(); 
         Thread t1 = new Thread(run1); 
         Thread t2 = new Thread(run2); 
         t1.start(); 
