@@ -2,9 +2,11 @@ package Java8Samples;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,6 +25,7 @@ public class CalculateNearestDistance {
 				new Point(2,3)
 			);
 		
+		int num = 2;
 		Map<Point, Double> mapper = new HashMap<Point, Double>();
 		
 		coordinates.stream()
@@ -32,18 +35,38 @@ public class CalculateNearestDistance {
 				});
 
 		Stream<Entry<Point, Double>> points = mapper.entrySet().stream()
-				.sorted(Map.Entry.<Point, Double>comparingByValue())
+				.sorted(Map.Entry.comparingByValue())
 				.limit(2);
 		points.forEach(System.out::println);
 		
-		System.out.println("----------------");
+		System.out.println("---get coordinate list-------------");
 		
 		mapper.entrySet().stream()
-			.sorted(Map.Entry.<Point, Double>comparingByValue())
-			.limit(2)
+			.sorted(Map.Entry.comparingByValue())
+			.limit(num)
 			.map(p -> p.getKey()).collect(Collectors.toList())
 			.forEach(System.out::println);
 
+        System.out.println("-----Sorted Map...");
+        // sort by values, distance, and return a new LinkedHashMap
+        // toMap() will returns HashMap by default, we need LinkedHashMap to keep the order.
+		LinkedHashMap<Point, Double> result = mapper.entrySet().stream()
+				.sorted(Map.Entry.comparingByValue())
+				.limit(num)
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+				(oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        System.out.println(result);
+        
+        System.out.println("-----toMap and then sorted...");
+        Map<Point, Double> result_map = coordinates.stream()
+        .collect(Collectors.toMap(Function.identity(), p -> Math.sqrt(p.getX()*p.getX()+p.getY()*p.getY())));
+        
+        LinkedHashMap<Point, Double> output = result_map.entrySet().stream()
+        		.sorted(Map.Entry.comparingByValue()).limit(num)
+        		.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+        				(oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        
+        System.out.println(output);
 	}
 	
 
